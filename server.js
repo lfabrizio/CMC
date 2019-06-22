@@ -1,25 +1,37 @@
 const express = require('express')
+const bodyParser = require('body-parser');
 const app = express()
 const port = 3000
+
+app.use(bodyParser.json());
 
 app.use('/', express.static("public"));
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
-app.get('/api', function (req, res) {
-    const userName = req.query.username;
-    const userId = req.query.id;
-    const message = req.query.message;
-    console.log(userName);
-    const reply = `${userName} with id of ${userId} is saying ${message}`
+var data = [];
+app.post('/api', function (req, res) {
+    const mentorName = req.body.mentorname;
+    const language = req.body.language;
+    const temp = {
+        mentorname: mentorName,
+        language: language
+      }
+      data.push(temp)
+ console.log(data);
+
+    const reply = `${mentorName} known languages ${language}`
     res.send("reply");
    })
 
-   app.get("/showprofile/:username", function (req, res) {
-    const user = req.params.username;
+   app.get("/showprofile/:mentorname", function (req, res) {
+    const user = req.params.mentorname;
     console.log(user);
    
     res.send("show profile working");
+   })
+   app.get("/getallusers", function (req, res) {
+    res.send(data)
    })
    
    
